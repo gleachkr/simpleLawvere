@@ -1,0 +1,116 @@
+\documentclass{article}
+\usepackage{amsmath, amsthm, amsfonts, tikz-cd}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corrolary}{Corollary}
+\DeclareMathOperator{\Id}{Id}
+
+\begin{document}
+
+
+\begin{definition}[Terminal]
+  An object $\mathbf{1}$ is terminal if for every object $B$ there's a unique
+  map $B\xrightarrow{!} \mathbf{1}$
+\end{definition} 
+A common intuition is that ``elements'' of objects correspond to arrows
+$\mathbf{1}\rightarrow A$. When we have an arrow $\mathbf{1}\xrightarrow{x} A$,
+we'll call it an element of $A$, and when we compose $f\circ x$, we'll write
+$f(x)$. Because there's just one map $\mathbf{1}\rightarrow\mathbf{1}$,
+$\mathbf{1}$ has only one element. We can denote this element by $\bullet$.
+
+\begin{definition}[Product]
+An product object for $A,B$ is an object $A\times B$ equipped with a pair of
+``projection'' maps $A\times B\xrightarrow{\pi_A} A$, $A\times
+B\xrightarrow{\pi_B} B$ such that for any pair of arrows $C\xrightarrow{f} A$
+and $C\xrightarrow{g} B$, there's a unique map $C\xrightarrow{f\times g} A\times
+B$ making the following diagram commute:
+\begin{center}
+\begin{tikzcd}
+    && A \\
+  C \ar[r,"f\times g"] \ar[urr,bend left=25, "f"] \ar[drr,bend right=25,"g" below]&A \times B\ar[ur,"\pi_A"]\ar[dr,"\pi_B~" below] \\
+    && B
+\end{tikzcd}
+\end{center}
+\end{definition}
+One intuition is that a product is the set all the pairs $\langle a,b\rangle$ of
+elements of $A$ and $B$, and the projections are defined by $\pi_A(\langle a,
+b\rangle) = a$, $\pi_B(\langle a, b\rangle) = b$. If $a,b$ are elements of $A,B$
+(i.e. arrows $\mathbf{1}\xrightarrow{a} A$, $\mathbf{1}\xrightarrow{b} B$) we
+can respect this intuition by using $\langle a,b\rangle$ to refer to
+$\mathbf{1}\xrightarrow{a\times b} A\times B$. We'll also write $f(a,b)$ instead
+of $f(\langle a, b\rangle)$.
+
+\begin{definition}[Exponential]
+  An exponential object for $A,B$ is an object $A^B$ equipped with an
+  ``application'' map $A^B\times B \xrightarrow{\mathsf{app}} A$ such that for
+  any arrow $C\times B \xrightarrow{f} A$, there's a unique map $C\xrightarrow{\tilde{f}}A^B$ such
+  that the following diagram commutes:
+  \begin{center}
+  \begin{tikzcd}
+    A^B\times B \ar[r,"\mathsf{app}"]& A\\
+    C\times B\ar[ur,"f" below]\ar[u, "\tilde{f}\times\Id_B"]&\\
+  \end{tikzcd}
+  \end{center}
+\end{definition}
+The intuition here is that $\tilde{f}$ is ``enclosing'' an element $c$ of $C$ in
+a function $\lambda b.f(c,b)$, and that $\mathsf{app}$ applies functions
+$\lambda b. \rho(b)$ in such a way that $\mathsf{app}(\lambda b.\rho(b), x)
+= \rho(x)$. If $c$ is an element $\mathbf{1}\xrightarrow{c} C$ of $C$, we can
+respect this intuition by using $\lambda b.f(c,b)$ to denote $\tilde{f}(c)$. If
+$C$ is $\mathbf{1}$, we can abbreviate $\lambda b.f(\bullet,b)$ as just
+$\lambda b. f(b)$
+\begin{definition} A Cartesian closed category is one in which every pair of
+  objects has a product and an exponential, and in which there's a terminal
+  object.
+\end{definition}
+
+\begin{definition}\
+  \begin{enumerate}
+    \item An object $A$ is homoiconic for $Y$ if there exists an
+      ``interpreter'' $A\xrightarrow{g}Y^A$ such that for every $A\xrightarrow{f} Y$,
+      there is a ``code'' $\hat{f}$ for $f$, which is an element of $A$ such that
+      $g(\hat{f}) = \lambda a . f(a)$
+    \item An object $Y$ has the fixed-point property if for every
+      $Y\xrightarrow{t} Y$, there's an element $a$ of $Y$ such that $t(a) = a$.
+  \end{enumerate}
+\end{definition}
+
+Think of a homoiconic object as one whose elements can serve \emph{either} as
+source-code for a program that outputs results of type $Y$, or as data/input for
+a program that outputs results of type $Y$.
+
+\begin{theorem}[Lawvere] In an Cartesian closed category, if $A$ is homoiconic
+  for $Y$, then $Y$ has the fixed-point property.
+\end{theorem}
+\begin{proof}
+  Suppose $A$ is homoiconic for $Y$. Let $\bar{g}$ denote $\mathsf{app} \circ
+  (g\times \Id_A)$. Then for any $A\xrightarrow{f}Y$, there's an element
+  $\hat{f}$ of $A$ such that for every element $a$ of $A$, 
+  \begin{align*}
+    \bar{g}(\hat{f}, a) &= \mathsf{app}(g(\hat{f}),a) \\
+                        &= \mathsf{app}(\lambda x. f(x),a)\\
+                        &= f(a)
+  \end{align*}
+  now consider any $Y\xrightarrow{t}Y$. Let $k$ be the composition:
+  $$\underbrace{A\xrightarrow{\Id_A\times Id_A} A\times A\xrightarrow{\bar{g}}Y\xrightarrow{t}Y}_k$$
+  then for any element $a$ of $A$,
+  $$\bar{g}(\hat{k}, a) = k(a) = t(\bar{g}(a,a))$$
+  But then if we set $a$ to also be equal to $\hat{k}$ we see that $\bar{g}(\hat{k},\hat{k})$ is a fixed point for $t$. Since $t$ was arbitrary, $A$ has the fixed point property.
+\end{proof}
+
+Note that in the category of sets, an interpreter $A\xrightarrow{g}Y^A$ would be
+a surjection. So
+
+\begin{corrolary}[Cantor/Lawvere] In the category of sets, $\mathbf{2}$ doesn't have the
+  fixed-point property (consider the map that swaps elements). So, there can
+  never be a surjection $A\rightarrow \mathbf{2}^A$.
+\end{corrolary}
+
+\begin{corrolary}[Kleene/Yanofsky] In an appropriate category of partial recursive functions, there
+  exists an interpreter $\mathbb{N}\xrightarrow{\phi} \mathcal{F}^\mathbb{N}$,
+  where $\mathcal{F}$ is the set of partial computable functions. Hence,
+  $\mathcal{F}$ has the fixed point property.
+\end{corrolary}
+
+\end{document}
