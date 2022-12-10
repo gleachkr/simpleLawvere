@@ -4,6 +4,7 @@
 \newtheorem{definition}{Definition}
 \newtheorem{theorem}{Theorem}
 \newtheorem{corrolary}{Corollary}
+\newtheorem{conjecture}{Conjecture}
 \DeclareMathOperator{\Id}{Id}
 
 \begin{document}
@@ -96,7 +97,7 @@ a program that outputs results of type $Y$.
   $$\underbrace{A\xrightarrow{\Id_A\times Id_A} A\times A\xrightarrow{\bar{g}}Y\xrightarrow{t}Y}_k$$
   then for any element $a$ of $A$,
   $$\bar{g}(\hat{k}, a) = k(a) = t(\bar{g}(a,a))$$
-  But then if we set $a$ to also be equal to $\hat{k}$ we see that $\bar{g}(\hat{k},\hat{k})$ is a fixed point for $t$. Since $t$ was arbitrary, $A$ has the fixed point property.
+  But then if we set $a$ to also be equal to $\hat{k}$ we see that $\bar{g}(\hat{k},\hat{k})$ is a fixed point for $t$. Since $t$ was arbitrary, $Y$ has the fixed point property.
 \end{proof}
 
 Note that in the category of sets, an interpreter $A\xrightarrow{g}Y^A$ would be
@@ -107,10 +108,10 @@ a surjection. So
   never be a surjection $A\rightarrow \mathbf{2}^A$.
 \end{corrolary}
 
-\begin{corrolary}[Kleene/Yanofsky] In an appropriate category of partial recursive functions, there
+\begin{conjecture}[Kleene/Yanofsky] In an appropriate category of partial recursive functions, there
   exists an interpreter $\mathbb{N}\xrightarrow{\phi} \mathcal{F}^\mathbb{N}$,
   where $\mathcal{F}$ is the set of partial computable functions. Hence,
   $\mathcal{F}$ has the fixed point property.
-\end{corrolary}
+\end{conjecture}
 
 \end{document}
