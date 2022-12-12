@@ -6,6 +6,7 @@
 \newtheorem{corrolary}{Corollary}
 \newtheorem{conjecture}{Conjecture}
 \DeclareMathOperator{\Id}{Id}
+\DeclareMathOperator{\Lazy}{Lazy}
 
 \begin{document}
 
@@ -68,36 +69,36 @@ $\lambda b. f(b)$
 
 \begin{definition}\
   \begin{enumerate}
-    \item An object $A$ is homoiconic for $Y$ if there exists an
-      ``interpreter'' $A\xrightarrow{g}Y^A$ such that for every $A\xrightarrow{f} Y$,
+    \item If $i\circ f = i\circ g$, then write $f\simeq_i g$
+    \item An object $A$ is homoiconic for $E\xrightarrow{i}Y$ if there exists an
+      ``interpreter'' $A\xrightarrow{g}E^A$ such that for every $A\xrightarrow{f} E$,
       there is a ``code'' $\hat{f}$ for $f$, which is an element of $A$ such that
-      $g(\hat{f}) = \lambda a . f(a)$
-    \item An object $Y$ has the fixed-point property if for every
-      $Y\xrightarrow{t} Y$, there's an element $a$ of $Y$ such that $t(a) = a$.
+      $i\circ g(\hat{f}) = i\circ \lambda a . f(a)$
+    \item An arrow $E\xrightarrow{i}Y$ has the fixed-point property if for every
+      $E\xrightarrow{t} E$, there's an element $a$ of $E$ such that $i\circ t(a) = i(a)$.
+    \item if $A$ is homoiconic for $E\xrightarrow{\Id_E}E$ we can just say that
+      it is homoiconic for $E$
+    \item if $E\xrightarrow{\Id_Y} E$ has the fixed-point property, then we can
+      just say that $E$ has the fixed-point property.
   \end{enumerate}
 \end{definition}
 
-Think of a homoiconic object as one whose elements can serve \emph{either} as
-source-code for a program that outputs results of type $Y$, or as data/input for
-a program that outputs results of type $Y$.
-
-\begin{theorem}[Lawvere] In an Cartesian closed category, if $A$ is homoiconic
-  for $Y$, then $Y$ has the fixed-point property.
+\begin{theorem}[Generalized Lawvere] In an Cartesian closed category, if $A$ is homoiconic for $E\xrightarrow{i}Y$ then $E\xrightarrow{i}Y$ has the fixed-point property.
 \end{theorem}
 \begin{proof}
-  Suppose $A$ is homoiconic for $Y$. Let $\bar{g}$ denote $\mathsf{app} \circ
-  (g\times \Id_A)$. Then for any $A\xrightarrow{f}Y$, there's an element
+  Suppose $A$ is homoiconic for $E\xrightarrow{i}Y$. Let $\bar{g}$ denote $\mathsf{app} \circ
+  (g\times \Id_A)$. Then for any $A\xrightarrow{f}E$, there's an element
   $\hat{f}$ of $A$ such that for every element $a$ of $A$, 
   \begin{align*}
-    \bar{g}(\hat{f}, a) &= \mathsf{app}(g(\hat{f}),a) \\
-                        &= \mathsf{app}(\lambda x. f(x),a)\\
-                        &= f(a)
+    i\circ \bar{g}(\hat{f}, a) &= i\circ \mathsf{app}(g(\hat{f}),a)  \\
+                        &= i\circ \mathsf{app}(\lambda x. f(x),a)\\
+                        &= i\circ f(a)
   \end{align*}
-  now consider any $Y\xrightarrow{t}Y$. Let $k$ be the composition:
-  $$\underbrace{A\xrightarrow{\Id_A\times Id_A} A\times A\xrightarrow{\bar{g}}Y\xrightarrow{t}Y}_k$$
+  now consider any $E\xrightarrow{t}E$. Let $k$ be the composition:
+  $$\underbrace{A\xrightarrow{\Id_A\times Id_A} A\times A\xrightarrow{\bar{g}}E\xrightarrow{t}E}_k$$
   then for any element $a$ of $A$,
-  $$\bar{g}(\hat{k}, a) = k(a) = t(\bar{g}(a,a))$$
-  But then if we set $a$ to also be equal to $\hat{k}$ we see that $\bar{g}(\hat{k},\hat{k})$ is a fixed point for $t$. Since $t$ was arbitrary, $Y$ has the fixed point property.
+  $$\bar{g}(\hat{k}, a) \simeq_i k(a) = t(\bar{g}(a,a))$$
+  But then if we set $a$ to also be equal to $\hat{k}$ we see that $\bar{g}(\hat{k},\hat{k})\simeq_i t(\bar{g}(\hat{k},\hat{k}))$ . Since $t$ was arbitrary, $E\xrightarrow{t}Y$ has the fixed point property.
 \end{proof}
 
 Note that in the category of sets, an interpreter $A\xrightarrow{g}Y^A$ would be
@@ -105,13 +106,27 @@ a surjection. So
 
 \begin{corrolary}[Cantor/Lawvere] In the category of sets, $\mathbf{2}$ doesn't have the
   fixed-point property (consider the map that swaps elements). So, there can
-  never be a surjection $A\rightarrow \mathbf{2}^A$.
+  never be a surjection $A\rightarrow \mathbf{2}^A$, since that would amount to
+  $A$ being homoiconic for $\mathbf{2}$
 \end{corrolary}
 
-\begin{conjecture}[Kleene/Yanofsky] In an appropriate category of partial recursive functions, there
-  exists an interpreter $\mathbb{N}\xrightarrow{\phi} \mathcal{F}^\mathbb{N}$,
-  where $\mathcal{F}$ is the set of partial computable functions. Hence,
-  $\mathcal{F}$ has the fixed point property.
+\begin{conjecture}[Kleene] If we have a category where
+  $\mathbb{N}\rightarrow\mathbb{N}$ is the set of total recursive functions,
+  then $\mathbb{N}$ is homoiconic for $\mathbb{N}\xrightarrow{\phi}\mathcal{F}$,
+  where $\mathcal{F}$ is the set of partial recursive functions and $\phi$ is 
+  given $e\mapsto\phi_e$.
+
+  Let $\Lazy(x,y)$ be the total function that maps each $x,y$ to the program
+  \begin{verbatim}
+  let e = phi(x,y)
+  return apply(e,$1)
+  \end{verbatim}
+  then $g:x\mapsto \lambda y.\Lazy(x,y)$ is an interpreter. If
+  $\mathbb{N}\xrightarrow{k}\mathbb{N}$ is an
+  arbitrary total recursive function, then we do have a code $\hat{k}$ such that
+  $\lambda y.\phi_{\Lazy(\hat{k},y)} = \lambda y.\phi_{k(y)}$; so $\mathbb{N}$ is
+  homoiconic for $\phi$. So for every total recursive $k$, there's an element of
+  $\mathbb{N}$ such that $\phi_{k(e)} = \phi_e $
 \end{conjecture}
 
 \end{document}
