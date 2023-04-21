@@ -15,10 +15,16 @@ noncomputable instance cartesian [CategoryTheory.Category α] [CategoryTheory.Li
   leftUnitor X := CategoryTheory.Limits.prod.leftUnitor X
   associator X Y Z := CategoryTheory.Limits.prod.associator X Y Z
 
-structure interpreter [CategoryTheory.Category α] [CategoryTheory.Limits.HasFiniteProducts α] [inst: CategoryTheory.MonoidalClosed α] 
+structure interpreter [CategoryTheory.Category α] [CategoryTheory.Limits.HasFiniteProducts α] [CategoryTheory.MonoidalClosed α] 
   (A E Y : α) (i : E ⟶ Y)  where
   map : A ⟶ (A ⟶[α] E)
   interprets : ∀f : A ⟶ E, ∃c : cartesian.tensorUnit' ⟶ A, 
     have lhs := (cartesian.rightUnitor A).inv ≫ CategoryTheory.MonoidalClosed.uncurry (c ≫  map) ≫ i
     have rhs := f ≫ i
     lhs = rhs
+
+def fixedPointProperty [CategoryTheory.Category α] [CategoryTheory.Limits.HasFiniteProducts α] { E Y : α } (i : E ⟶ Y) :=
+  ∀t : E ⟶ E, ∃c: cartesian.tensorUnit' ⟶ E, c ≫  t ≫ i = c ≫  i
+
+theorem lawvereGeneralized [CategoryTheory.Category α] [CategoryTheory.Limits.HasFiniteProducts α] [CategoryTheory.MonoidalClosed α] {A E Y : α} {i : E ⟶ Y}
+  : Nonempty (interpreter A E Y i) → fixedPointProperty i := sorry
