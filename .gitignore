@@ -256,3 +256,5 @@ TSWLatexianTemp*
 # End of https://www.gitignore.io/api/latex
 
 *.vim
+/build
+/lake-packages/*
