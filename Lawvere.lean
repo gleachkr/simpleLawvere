@@ -19,6 +19,6 @@ structure interpreter [CategoryTheory.Category α] [CategoryTheory.Limits.HasFin
   (A E Y : α) (i : E ⟶ Y)  where
   map : A ⟶ (A ⟶[α] E)
   interprets : ∀f : A ⟶ E, ∃c : cartesian.tensorUnit' ⟶ A, 
-    have lhs := CategoryTheory.MonoidalClosed.uncurry (c ≫  map) ≫ i
-    have rhs := (cartesian.rightUnitor A).hom ≫ f ≫ i
+    have lhs := (cartesian.rightUnitor A).inv ≫ CategoryTheory.MonoidalClosed.uncurry (c ≫  map) ≫ i
+    have rhs := f ≫ i
     lhs = rhs
