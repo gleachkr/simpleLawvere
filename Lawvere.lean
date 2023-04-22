@@ -41,5 +41,6 @@ theorem lawvereGeneralized [Category α] [Limits.HasFiniteProducts α] [Monoidal
     have eq₂ := eq₁ k'
     have rweq : Limits.prod.lift k' (k' ≫ int.map) = k' ≫ Limits.prod.lift (𝟙 A) int.map := by simp
     simp at eq₂ 
-    rw [rweq] at eq₂
-    refine ⟨Limits.prod.lift k' (k' ≫ int.map) ≫  (ihom.ev A).app E, ?_⟩
+    refine ⟨(k' ≫ Limits.prod.lift (𝟙 A) int.map) ≫  (ihom.ev A).app E, ?_⟩
+    simp
+    rw [eq₂, rweq, Category.assoc]
