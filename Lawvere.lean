@@ -39,8 +39,8 @@ theorem lawvereGeneralized [Category α] [Limits.HasFiniteProducts α] [Monoidal
     let k : A ⟶ E := Limits.diag A ≫ g ≫ t
     have ⟨k',eq₁⟩ := fact k
     have eq₂ := eq₁ k'
+    simp at eq₂
     have rweq : Limits.prod.lift k' (k' ≫ int.map) = k' ≫ Limits.prod.lift (𝟙 A) int.map := by simp
-    simp at eq₂ 
-    refine ⟨(k' ≫ Limits.prod.lift (𝟙 A) int.map) ≫  (ihom.ev A).app E, ?_⟩
+    refine ⟨Limits.prod.lift k' (k' ≫ int.map) ≫  (ihom.ev A).app E, ?_⟩
     simp
     rw [eq₂, rweq, Category.assoc]
