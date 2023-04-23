@@ -19,7 +19,7 @@ structure interpreter [Category α] [Limits.HasFiniteProducts α] [mc : Monoidal
   (A E Y : α) (i : E ⟶ Y)  where
   map : A ⟶ (A ⟶[α] E)
   interprets : ∀f : A ⟶ E, ∃c : cartesian.tensorUnit' ⟶ A, 
-    let lhs := (cartesian.rightUnitor A).inv ≫ MonoidalClosed.uncurry (c ≫  map) ≫ i
+    let lhs := (Limits.prod.rightUnitor A).inv ≫ (Limits.prod.map (𝟙 A) (c ≫  map)) ≫ (ihom.ev A).app E ≫ i
     let rhs := f ≫ i
     lhs = rhs
 
@@ -34,7 +34,16 @@ theorem lawvereGeneralized [Category α] [Limits.HasFiniteProducts α] [Monoidal
     let g := (Limits.prod.map (𝟙 A) int.map) ≫ (ihom.ev A).app E
     simp at g
     have fact : ∀f : A ⟶ E, ∃c : cartesian.tensorUnit' ⟶ A, ∀a : cartesian.tensorUnit' ⟶ A, 
-      (Limits.prod.lift c a) ≫ g ≫ i = a ≫ f ≫ i := sorry
+      (Limits.prod.lift a c) ≫ g ≫ i = a ≫ f ≫ i := by
+        intros f
+        have ⟨f',eq₀⟩ := int.interprets f
+        refine ⟨f',?_⟩
+        intros a
+        have termEq₁ : a ≫ Limits.terminal.from A = 𝟙 cartesian.tensorUnit' := by simp
+        simp [←eq₀, Limits.prod.comp_lift_assoc]
+        have termEq₂ : a ≫ Limits.terminal.from A ≫ f' ≫ int.map = (a ≫ Limits.terminal.from A) ≫ f' ≫ int.map := by rw [Category.assoc]
+        rw [termEq₂,termEq₁]
+        simp
     intros t
     let k : A ⟶ E := Limits.diag A ≫ g ≫ t
     have ⟨k',eq₁⟩ := fact k

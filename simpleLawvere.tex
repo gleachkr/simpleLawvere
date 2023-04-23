@@ -73,7 +73,8 @@ $\lambda b. f(b)$
     \item An object $A$ is homoiconic for $E\xrightarrow{i}Y$ if there exists an
       ``interpreter'' $A\xrightarrow{g}E^A$ such that for every $A\xrightarrow{f} E$,
       there is a ``code'' $\hat{f}$ for $f$, which is an element of $A$ such that
-      $i\circ g(\hat{f}) = i\circ \lambda a . f(a)$
+      $i\circ \mathsf{app}(g(\hat{f}),a) = i\circ f(a)$
+      for $a ∈ A$
     \item An arrow $E\xrightarrow{i}Y$ has the fixed-point property if for every
       $E\xrightarrow{t} E$, there's an element $a$ of $E$ such that $i\circ t(a) = i(a)$.
     \item if $A$ is homoiconic for $E\xrightarrow{\Id_E}E$ we can just say that
